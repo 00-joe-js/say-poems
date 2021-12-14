@@ -46,5 +46,6 @@ export const say = (speechString, voice = 0, rate = 1) => {
 };
 
 export const stopTalking = () => {
+    clearInterval(currentSayingInterval);
     SpeechAPI.cancel();
 };
