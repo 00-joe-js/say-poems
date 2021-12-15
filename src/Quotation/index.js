@@ -2,6 +2,13 @@
 import { useEffect, useState } from "react";
 import { say, getVoices } from "./speech";
 
+const voiceNameToIndex = name => {
+    if (typeof name === "number") return name;
+    const voices = getVoices();
+    const index = voices.findIndex(v => v.name === name);
+    return index !== -1 ? index : null;
+};
+
 const VoiceSelect = ({ selectedVoice, onChange }) => {
 
     const voices = getVoices();
@@ -18,7 +25,7 @@ const VoiceSelect = ({ selectedVoice, onChange }) => {
 
 const VoiceControls = ({ initialVoice, initialRate, onUpdatedConfig }) => {
 
-    const [selectedVoice, setVoice] = useState(initialVoice);
+    const [selectedVoice, setVoice] = useState(voiceNameToIndex(initialVoice) || voiceNameToIndex("Google US English") || 0);
     const [selectedRate, setRate] = useState(initialRate);
 
     useEffect(() => {
@@ -49,7 +56,7 @@ const Quotation = ({ text, voice, rate, alteredText, title, author, url }) => {
 
     return (
         <div className="poem">
-            <a href={url} target="_blank" rel="noreferrer">{title} by {author}</a>
+            <a href={url} target="_blank" rel="noreferrer">{title} - <strong>{author}</strong></a>
             <div onClick={sayQuote}>
                 <pre>{text}</pre>
             </div>
